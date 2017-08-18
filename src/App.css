@@ -1,0 +1,71 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  background:  -webkit-linear-gradient(45deg, #36ff96, #0bb387);
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.navbar-custom {
+  background:  -webkit-linear-gradient(45deg, #36ff96, #0bb387);
+  height: 50px;
+  vertical-align: middle;
+  color: white;
+  font-size: 16px;
+}
+/* change the brand and text color */
+.navbar-custom .navbar-brand,
+.navbar-custom .navbar-text {
+  color: rgba(255,255,255,.8);
+}
+/* change the link color */
+.navbar-custom .navbar-nav .nav-link {
+  color: rgba(255,255,255,.5);
+}
+/* change the color of active or hovered links */
+.navbar-custom .nav-item.active .nav-link,
+.navbar-custom .nav-item:hover .nav-link {
+  color: #ffffff;
+}
+
+.item-header{
+  --color: white;
+  --background:  -webkit-linear-gradient(45deg, #36ff96, #0bb387);
+  --background:  -webkit-linear-gradient(45deg, #36ff96, #0bb387);
+}
+
+.item-card{
+  --background: #E1F6E1;
+  box-shadow: 2px 5px 10px #D6DADA;
+  --background:  -webkit-linear-gradient(45deg, #3D3F3E, #14201D);
+  --color: white;
+}
+
+.container
+{
+  --background:  -webkit-linear-gradient(45deg, #3D3F3E, #14201D);
+}
+
+
+.right-align
+{
+  float: right;
+  align-content: center;
+}
