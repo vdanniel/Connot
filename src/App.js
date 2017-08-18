@@ -50,7 +50,7 @@ class App extends Component {
           summary: items[item].summary,
           notes: items[item].notes
         });
-        console.info("item s: " + item)
+        console.info("item s: " + items[item].notes)
       }
       this.setState({
         items: newState
