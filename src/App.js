@@ -20,9 +20,11 @@ class App extends Component {
 
     // This binding is necessary to make `this` work in the callback
     this.AddNotes = this.AddNotes.bind(this);
-    this.state = {show:false, summary:'',notes:'', msg:'info', items:[]};
+    this.state = {show:false, showNA:false, currentItemId:'',summary:'',notes:'',speaker:'', msg:'info', when:'', items:[]};
     this.handleChange = this.handleChange.bind(this);
     this.submitData = this.submitData.bind(this);
+    this.NotAvailable = this.NotAvailable.bind(this);
+    this.ShowViewItem = this.ShowViewItem.bind(this);
   }
   submitData(e) {
     e.preventDefault();
@@ -30,14 +32,19 @@ class App extends Component {
     const itemsRef = firebase.database().ref('items');
     const item = {
       summary: this.state.summary,
-      notes: this.state.notes
+      notes: this.state.notes,
+      speaker: this.state.speaker,
+      when: this.state.when
     }
     itemsRef.push(item);
     this.setState({
       summary: '',
       notes: '',
-      msg: "success"
+      msg: "success",
+      speaker:'',
+      when:''
     });
+    this.hideModal();
   }
   componentDidMount() {
     const itemsRef = firebase.database().ref('items');
@@ -48,15 +55,24 @@ class App extends Component {
         newState.push({
           id: item,
           summary: items[item].summary,
-          notes: items[item].notes
+          notes: items[item].notes,
+          speaker: items[item].speaker,
+          when: items[item].when
         });
-        console.info("item s: " + items[item].notes)
+        console.info("item s: " + ":" + item.when);
       }
       this.setState({
         items: newState
       });
     });
   }
+  
+  ShowViewItem()
+  {
+
+  }
+
+
 
   showModal = () => {
     this.setState({show: true});
@@ -64,6 +80,7 @@ class App extends Component {
 
   hideModal = () => {
     this.setState({show: false});
+    this.setState({showNA: false});
   }
 
   handleChange (e) {
@@ -73,21 +90,28 @@ class App extends Component {
     });
   }
 
+  NotAvailable(e)
+  {
+    e.preventDefault();
+    this.setState({showNA:true}); 
+  }
+
   render() {
     return (
       <div >
-       <header>
+        <header>
           <div className="navbar-custom"  >
           <Grid>
             <Row className="show-grid">
             <Col xs={6} md={6}>
             <div>
-            <h3>Dan's NDC ram</h3>
+
+            <h3>[<span className="glyphicon glyphicon-plane" aria-hidden="true"></span>] Dan's NDC ramblings</h3>
             </div>
             </Col>
             <Col xs={6} md={6} id="buttonTop">
             <div className="right-align">
-              <Button bsSize="large" id onClick={this.showModal}>+</Button>
+              <span onClick={this.showModal} className="glyphicon glyphicon-plus" aria-hidden="true"></span>
             </div>
             </Col>
             </Row>
@@ -95,43 +119,84 @@ class App extends Component {
           </div>
          </header>
        
-        <Reveal effect="animated fadeInUp">
+     
           <Grid>
             <Row className="show-grid">
               {this.state.items.map((item) => {
                   return (
-                    <Col sm={6} md={6} id={item.id}>
-                    <div className="item-card">
-                      <div className="item-header">
-                        <h4>{item.summary}</h4>
+                    <Col sm={8} md={12} lg={12} key={item.id}>
+                      <div key={item.id} className="item-card">
+                      <div key={item.id} className="item-header">
+                      <Grid>
+                        <Row className="show-grid">
+                          <Col sm={12} md={10} lg={10}>
+                         <b>{item.summary}</b> <Label bsStyle="info">{item.speaker}</Label>
+                        </Col>
+                        <Col sm={2} md={2} lg={2} >
+                        <span  className="badge">{item.when}</span>
+                          <span onClick={this.NotAvailable} className="badge"><span className="glyphicon glyphicon-pencil" aria-hidden="true"></span></span>&nbsp;
+                          <span onClick={this.ShowViewItem} className="badge"><span className="glyphicon glyphicon-blackboard" aria-hidden="true"></span></span>
+                        </Col>
+                       
+                        </Row>
+                        <Row className="show-grid">
+                          <Col sm={8} md={8} lg={8}>
+                          {item.notes}
+                          {item.notes.split('\n').map(function(item, key) {
+                            return (
+                              <span key={key}>
+                                {item}
+                                <br/>
+                              </span>
+                            )
+                          })}
+                          </Col>
+                          </Row>
+                        </Grid>
                       </div>
-                        <p>{item.notes}</p>
                       </div>
                     </Col>
                   )
                 })}
-                </Row>
+              </Row>
             </Grid>
-          </Reveal>
+         
 
-<Modal
-{...this.props}
-show={this.state.show}
-onHide={this.hideModal}
-dialogClassName="custom-modal"
->
-<Modal.Header closeButton>
-  <Modal.Title id="contained-modal-title-lg">Add my NDC session  </Modal.Title>
-</Modal.Header>
-<Modal.Body>
+        <Modal
+        {...this.props}
+        show={this.state.show}
+        onHide={this.hideModal}
+        dialogClassName="custom-modal"
+        >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-lg">Add my NDC session  </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
 
-<form>
+        <form>
         <FormGroup
           controlId="summary" >
           <ControlLabel>Wat was the session about??</ControlLabel>
           <FormControl
             type="text"
             onChange={this.handleChange} />
+        </FormGroup>
+        <FormGroup
+          controlId="speaker" >
+          <ControlLabel>who was doing the talk??</ControlLabel>
+          <FormControl
+            type="text"
+            onChange={this.handleChange} />
+        </FormGroup>
+        <FormGroup
+          controlId="when" >
+          <ControlLabel>when? </ControlLabel>
+          <FormControl componentClass="select" placeholder="select" onChange={this.handleChange}>
+          <option value="Wednesday">Wednesday</option>
+          <option value="Thursday">Thursday</option>
+          <option value="Friday">Friday</option>
+          <option value="Saturday">Saturday</option>
+        </FormControl>
         </FormGroup>
 
         <FormGroup controlId="notes">
@@ -140,16 +205,32 @@ dialogClassName="custom-modal"
           onChange={this.handleChange}/>
         </FormGroup>
 
-        <Label bsStyle={this.state.msg}>{this.state.msg}</Label>
+        <Label bsStyle={this.state.msg}>fill up and save</Label>
 
       </form>
-</Modal.Body>
-<Modal.Footer>
-<Button onClick={this.hideModal}>nah, take me back.</Button>
-  <Button onClick={this.submitData}>yea, stamp it.</Button>
-</Modal.Footer>
-</Modal>
-</div>
+    </Modal.Body>
+    <Modal.Footer>
+    <Button onClick={this.hideModal}>nah, take me back.</Button>
+      <Button onClick={this.submitData}>yea, stamp it.</Button>
+    </Modal.Footer>
+    </Modal>
+
+    <Modal
+        {...this.props}
+        show={this.state.showNA}
+        onHide={this.hideModal}
+        dialogClassName="custom-modal"
+        >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-lg">Really!! </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+                Are you me? Naah! Its Coming!!!
+        </Modal.Body>
+        <Modal.Footer>
+        </Modal.Footer>
+    </Modal>
+  </div>
     );
   }
 
