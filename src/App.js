@@ -1,21 +1,23 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, { PropTypes, Component } from 'react';
+//import logo from './logo.svg';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 
 import './App.css';
 
-import { Grid, Col, Row, Navbar, Label, Jumbotron, Button, Modal, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
-import Popup from 'react-popup';
-import Reveal from 'react-reveal'; // this package 
+import { Grid, Col, Row, Label, Button, Modal, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
+//import Popup from 'react-popup';
+//import Reveal from 'react-reveal'; // this package 
 import 'animate.css/animate.css'; // CSS animation effects library 
 
-import firebase from './firebase.js'
+import firebase from './firebase.js';
+import { FeatureFlag } from "react-launch-darkly";
 
 class App extends Component {
   constructor(props) {
     super(props);
+    //const propTypes = {children:PropTypes.any};
     //const currentItem;
     //this.state = {isToggleOn: true};
 
@@ -61,7 +63,6 @@ class App extends Component {
           when: items[item].when,
           currentItemId: item.id
         });
-        console.info("item s: " + ":" + item.when);
       }
       this.setState({
         items: newState
@@ -72,9 +73,9 @@ class App extends Component {
 
  
   showModal = () => {
-    this.setState({showAuth:true})
+    //this.setState({showAuth:true})
 
-    //this.setState({show: true});
+    this.setState({show: true});
   }
 
   hideModal = () => {
@@ -104,7 +105,7 @@ class App extends Component {
     for(var i=0;i<this.state.items.length;i++)
       {
         console.warn("entering presentaiotn mode level 2: " + this.state.items[i].summary );
-        if(this.state.items[i].id == t)
+        if(this.state.items[i].id === t)
           {
             console.warn("entering presentaiotn mode level 2: " + this.state.items[i] );
             this.setState({
@@ -120,24 +121,38 @@ class App extends Component {
     this.setState({showPresentation:true}); 
   }
   
+  _renderFeature () {
+    return (
+      <div className="right-align">
+      <h2><span onClick={this.showModal} className="glyphicon glyphicon-plus" aria-hidden="true"></span></h2>
+    </div>
+    );
+  }
 
   render() {
     return (
       <div >
+        <div>
+        
+         </div>
+
         <header>
           <div className="navbar-custom"  >
           <Grid>
             <Row className="show-grid hidden-xs hidden-sm hidden-md">
             <Col xs={6} md={6}>
             <div>
-
+           
             <h2>[<span className="glyphicon glyphicon-plane" aria-hidden="true"></span>] Dan's NDC ramblings</h2>
             </div>
             </Col>
             <Col xs={6} md={6} id="buttonTop">
+            <div>
             <div className="right-align">
-              <h2><span onClick={this.showModal} className="glyphicon glyphicon-plus" aria-hidden="true"></span></h2>
-            </div>
+            <h2><span onClick={this.showModal} className="glyphicon glyphicon-plus" aria-hidden="true"></span></h2>
+          </div>
+            </div> 
+           
             </Col>
             </Row>
 
