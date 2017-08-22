@@ -68,9 +68,13 @@ class App extends Component {
       });
     });
   }
+
+
  
   showModal = () => {
-    this.setState({show: true});
+    this.setState({showAuth:true})
+
+    //this.setState({show: true});
   }
 
   hideModal = () => {
@@ -127,15 +131,17 @@ class App extends Component {
             <Col xs={6} md={6}>
             <div>
 
-            <h3>[<span className="glyphicon glyphicon-plane" aria-hidden="true"></span>] Dan's NDC ramblings</h3>
+            <h2>[<span className="glyphicon glyphicon-plane" aria-hidden="true"></span>] Dan's NDC ramblings</h2>
             </div>
             </Col>
             <Col xs={6} md={6} id="buttonTop">
             <div className="right-align">
-              <span onClick={this.showModal} className="glyphicon glyphicon-plus" aria-hidden="true"></span>
+              <h2><span onClick={this.showModal} className="glyphicon glyphicon-plus" aria-hidden="true"></span></h2>
             </div>
             </Col>
             </Row>
+
+
             <Row className="show-grid visible-xs visible-sm visible-md">
             <Col xs={8} md={8}>
             <div>
