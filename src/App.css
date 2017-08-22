@@ -76,3 +76,21 @@
   align-content: center;
   border-right: 30px;
 }
+
+.details
+{
+  height: 60px;
+  overflow: auto;
+  display: flex;
+  flex :1;
+}
+
+.footer-card
+{
+  color: grey;
+  font-size: 8px;
+}
+.badge
+{
+  cursor: pointer;
+}

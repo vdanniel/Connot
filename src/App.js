@@ -99,15 +99,10 @@ class App extends Component {
 
   ShowViewItem(t)
   {
-    
-    //console.warn("entering presentaiotn mode : "+ e.target.value + " : " + e.target.key + " : " +  t);
-    console.warn("entering presentaiotn mode level 2: " + this.state.items[1].summary );
     for(var i=0;i<this.state.items.length;i++)
       {
-        console.warn("entering presentaiotn mode level 2: " + this.state.items[i].summary );
         if(this.state.items[i].id === t)
           {
-            console.warn("entering presentaiotn mode level 2: " + this.state.items[i] );
             this.setState({
               summary: this.state.items[i].summary,
               notes: this.state.items[i].notes,
@@ -116,7 +111,6 @@ class App extends Component {
             });
           }
       }
-    //this.setState({currentItem: this.state.items[this.state.currentItemId]});
     
     this.setState({showPresentation:true}); 
   }
@@ -188,28 +182,29 @@ class App extends Component {
                          <b>{item.summary}</b> <Label bsStyle="info">{item.speaker}</Label>
                         </Col>
                         <Col sm={2} md={2} lg={2} >
-                        <span  className="badge">{item.when}</span>
-                          <span onClick={this.NotAvailable} className="badge"><span className="glyphicon glyphicon-pencil" aria-hidden="true"></span></span>&nbsp;
-                          <span key={item.id} id={item.id}  onClick={this.ShowViewItem.bind(this, item.id)} className="badge" value="dsada"><span className="glyphicon glyphicon-blackboard" aria-hidden="true"></span></span>
+                       
+                          <span onClick={this.NotAvailable} className="badge"><span className="glyphicon glyphicon-pencil" aria-hidden="true"></span>edit</span>&nbsp;
+                          <span key={item.id} id={item.id}  onClick={this.ShowViewItem.bind(this, item.id)} className="badge" value="dsada"><span className="glyphicon glyphicon-blackboard" aria-hidden="true"></span> view</span>
                         </Col>
                        
                         </Row>
-                        <Row className="show-grid">
-                          <Col sm={8} md={8} lg={8}>
-                        
-                          {item.notes.split('\n').map(function(item, key) {
-                            return (
-                              <span key={key}>
-                                {item}
-                                <br/>
-                              </span>
-                            )
-                          })}
+                        <Row className="show-grid details">
+                          <Col sm={8} md={8} lg={8} >
+                            <div >
+                              {item.notes.split('\n').map(function(item, key) {
+                                return (
+                                  <span key={key}>
+                                    {item}
+                                    <br/>
+                                  </span>
+                                )
+                              })}
+                          </div>
                           </Col>
                           </Row>
-                          <Row className="show-grid footer-card">
-                          <Col sm={8} md={8} lg={8}>
-                            <div key> {item.id}</div>
+                          <Row className="show-grid ">
+                          <Col sm={6} md={6} lg={6}>
+                          <span  className="badge">{item.when}</span>  </Col><Col sm={6} md={6} lg={6}><div className="footer-card" key> {item.id}</div>
                           </Col>
                           </Row>
                         </Grid>
