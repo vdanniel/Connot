@@ -126,9 +126,7 @@ class App extends Component {
   render() {
     return (
       <div >
-        <div>
-        
-         </div>
+       
 
         <header>
           <div className="navbar-custom"  >
@@ -137,7 +135,7 @@ class App extends Component {
             <Col xs={6} md={6}>
             <div>
            
-            <h2>[<span className="glyphicon glyphicon-plane" aria-hidden="true"></span>] Dan's NDC ramblings</h2>
+            <h2>[<span className="glyphicon glyphicon-plane" aria-hidden="true"></span>] Dan's NDC take aways</h2>
             </div>
             </Col>
             <Col xs={6} md={6} id="buttonTop">
@@ -155,7 +153,7 @@ class App extends Component {
             <Col xs={8} md={8}>
             <div>
 
-          [<span className="glyphicon glyphicon-plane" aria-hidden="true"></span>] Dan's NDC ramblings
+          [<span className="glyphicon glyphicon-plane" aria-hidden="true"></span>] Dan's NDC take aways
             </div>
             </Col>
             <Col xs={4} md={4} id="buttonTop">
@@ -215,7 +213,11 @@ class App extends Component {
                 })}
               </Row>
             </Grid>
+            <br></br>
+        <div className="navbar-custom" >
          
+        A hands-on project on - React.js-ReartFire-FireBase-GitKraken-BitBucket remote-Azure web App-VSTS-CI-Auth0*-launchdarkly*-
+         </div>
 
         <Modal
         {...this.props}
