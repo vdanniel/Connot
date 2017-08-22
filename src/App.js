@@ -16,15 +16,16 @@ import firebase from './firebase.js'
 class App extends Component {
   constructor(props) {
     super(props);
+    //const currentItem;
     //this.state = {isToggleOn: true};
 
     // This binding is necessary to make `this` work in the callback
     this.AddNotes = this.AddNotes.bind(this);
-    this.state = {show:false, showNA:false, currentItemId:'',summary:'',notes:'',speaker:'', msg:'info', when:'', items:[]};
+    this.state = {show:false, showNA:false, showPresentation:false,currentItem:[], currentItemId:'',summary:'',notes:'',speaker:'', msg:'info', when:'', items:[]};
     this.handleChange = this.handleChange.bind(this);
     this.submitData = this.submitData.bind(this);
     this.NotAvailable = this.NotAvailable.bind(this);
-    this.ShowViewItem = this.ShowViewItem.bind(this);
+    //this.ShowViewItem = this.ShowViewItem.bind(this);
   }
   submitData(e) {
     e.preventDefault();
@@ -57,7 +58,8 @@ class App extends Component {
           summary: items[item].summary,
           notes: items[item].notes,
           speaker: items[item].speaker,
-          when: items[item].when
+          when: items[item].when,
+          currentItemId: item.id
         });
         console.info("item s: " + ":" + item.when);
       }
@@ -66,14 +68,7 @@ class App extends Component {
       });
     });
   }
-  
-  ShowViewItem()
-  {
-
-  }
-
-
-
+ 
   showModal = () => {
     this.setState({show: true});
   }
@@ -81,6 +76,7 @@ class App extends Component {
   hideModal = () => {
     this.setState({show: false});
     this.setState({showNA: false});
+    this.setState({showPresentation: false});
   }
 
   handleChange (e) {
@@ -96,13 +92,38 @@ class App extends Component {
     this.setState({showNA:true}); 
   }
 
+  ShowViewItem(t)
+  {
+    
+    //console.warn("entering presentaiotn mode : "+ e.target.value + " : " + e.target.key + " : " +  t);
+    console.warn("entering presentaiotn mode level 2: " + this.state.items[1].summary );
+    for(var i=0;i<this.state.items.length;i++)
+      {
+        console.warn("entering presentaiotn mode level 2: " + this.state.items[i].summary );
+        if(this.state.items[i].id == t)
+          {
+            console.warn("entering presentaiotn mode level 2: " + this.state.items[i] );
+            this.setState({
+              summary: this.state.items[i].summary,
+              notes: this.state.items[i].notes,
+              speaker: this.state.items[i].speaker,
+              when: this.state.items[i].when,
+            });
+          }
+      }
+    //this.setState({currentItem: this.state.items[this.state.currentItemId]});
+    
+    this.setState({showPresentation:true}); 
+  }
+  
+
   render() {
     return (
       <div >
         <header>
           <div className="navbar-custom"  >
           <Grid>
-            <Row className="show-grid">
+            <Row className="show-grid hidden-xs hidden-sm hidden-md">
             <Col xs={6} md={6}>
             <div>
 
@@ -110,6 +131,19 @@ class App extends Component {
             </div>
             </Col>
             <Col xs={6} md={6} id="buttonTop">
+            <div className="right-align">
+              <span onClick={this.showModal} className="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </div>
+            </Col>
+            </Row>
+            <Row className="show-grid visible-xs visible-sm visible-md">
+            <Col xs={8} md={8}>
+            <div>
+
+          [<span className="glyphicon glyphicon-plane" aria-hidden="true"></span>] Dan's NDC ramblings
+            </div>
+            </Col>
+            <Col xs={4} md={4} id="buttonTop">
             <div className="right-align">
               <span onClick={this.showModal} className="glyphicon glyphicon-plus" aria-hidden="true"></span>
             </div>
@@ -135,13 +169,13 @@ class App extends Component {
                         <Col sm={2} md={2} lg={2} >
                         <span  className="badge">{item.when}</span>
                           <span onClick={this.NotAvailable} className="badge"><span className="glyphicon glyphicon-pencil" aria-hidden="true"></span></span>&nbsp;
-                          <span onClick={this.ShowViewItem} className="badge"><span className="glyphicon glyphicon-blackboard" aria-hidden="true"></span></span>
+                          <span key={item.id} id={item.id}  onClick={this.ShowViewItem.bind(this, item.id)} className="badge" value="dsada"><span className="glyphicon glyphicon-blackboard" aria-hidden="true"></span></span>
                         </Col>
                        
                         </Row>
                         <Row className="show-grid">
                           <Col sm={8} md={8} lg={8}>
-                          {item.notes}
+                        
                           {item.notes.split('\n').map(function(item, key) {
                             return (
                               <span key={key}>
@@ -150,6 +184,11 @@ class App extends Component {
                               </span>
                             )
                           })}
+                          </Col>
+                          </Row>
+                          <Row className="show-grid footer-card">
+                          <Col sm={8} md={8} lg={8}>
+                            <div key> {item.id}</div>
                           </Col>
                           </Row>
                         </Grid>
@@ -228,6 +267,33 @@ class App extends Component {
                 Are you me? Naah! Its Coming!!!
         </Modal.Body>
         <Modal.Footer>
+        </Modal.Footer>
+    </Modal>
+
+
+    <Modal
+        {...this.props}
+        show={this.state.showPresentation}
+        onHide={this.hideModal}
+        dialogClassName="custom-modal"
+        >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-lg">{this.state.summary}</Modal.Title>
+          <Label bsStyle="info">{this.state.speaker}</Label>
+         
+        </Modal.Header>
+        <Modal.Body>
+        {this.state.notes.split('\n').map(function(item, key) {
+                            return (
+                              <span key={key}>
+                                {item}
+                                <br/>
+                              </span>
+                            )
+                          })}
+        </Modal.Body>
+        <Modal.Footer>
+        <Label bsStyle="primary">{this.state.when}</Label>
         </Modal.Footer>
     </Modal>
   </div>
